@@ -34,47 +34,38 @@ function MessageItem({ msg, index }: MessageItemProps) {
   )
 }
 
-const STORAGE_KEY = 'wedding-guestbook-messages'
-
-// localStorage에서 메시지 불러오기
-const loadMessagesFromStorage = (): Message[] => {
-  if (typeof window === 'undefined') return []
-  
+// API에서 메시지 불러오기
+const loadMessagesFromAPI = async (): Promise<Message[]> => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      return JSON.parse(stored)
+    const response = await fetch('/api/guestbook')
+    if (response.ok) {
+      const data = await response.json()
+      return data.messages || []
     }
   } catch (error) {
     console.error('메시지 불러오기 실패:', error)
   }
-  
-  // 기본 샘플 메시지
-  return [
-    {
-      id: 1,
-      name: '김철수',
-      message: '축하합니다! 행복하게 사세요!',
-      date: new Date().toLocaleDateString('ko-KR').replace(/\./g, '.').slice(0, -1),
-    },
-    {
-      id: 2,
-      name: '이영희',
-      message: '두 분의 앞날을 축복합니다.',
-      date: new Date().toLocaleDateString('ko-KR').replace(/\./g, '.').slice(0, -1),
-    },
-  ]
+  return []
 }
 
-// localStorage에 메시지 저장하기
-const saveMessagesToStorage = (messages: Message[]) => {
-  if (typeof window === 'undefined') return
-  
+// API에 메시지 저장하기
+const saveMessageToAPI = async (name: string, message: string): Promise<Message | null> => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+    const response = await fetch('/api/guestbook', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, message }),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data.message
+    }
   } catch (error) {
     console.error('메시지 저장 실패:', error)
   }
+  return null
 }
 
 export default function GuestBook() {
@@ -83,29 +74,45 @@ export default function GuestBook() {
   const [messages, setMessages] = useState<Message[]>([])
   const [showForm, setShowForm] = useState(false)
   const [formData, setFormData] = useState({ name: '', message: '' })
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // 컴포넌트 마운트 시 localStorage에서 메시지 불러오기
+  // 컴포넌트 마운트 시 API에서 메시지 불러오기
   useEffect(() => {
-    const loadedMessages = loadMessagesFromStorage()
-    setMessages(loadedMessages)
+    const loadMessages = async () => {
+      setIsLoading(true)
+      try {
+        const loadedMessages = await loadMessagesFromAPI()
+        setMessages(loadedMessages)
+      } catch (error) {
+        console.error('메시지 불러오기 실패:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadMessages()
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.name.trim() || !formData.message.trim()) return
 
-    const newMessage: Message = {
-      id: Date.now(),
-      name: formData.name.trim(),
-      message: formData.message.trim(),
-      date: new Date().toLocaleDateString('ko-KR').replace(/\./g, '.').slice(0, -1),
+    setIsSubmitting(true)
+    try {
+      const newMessage = await saveMessageToAPI(formData.name, formData.message)
+      if (newMessage) {
+        setMessages([newMessage, ...messages])
+        setFormData({ name: '', message: '' })
+        setShowForm(false)
+      } else {
+        alert('메시지 저장에 실패했습니다. 다시 시도해주세요.')
+      }
+    } catch (error) {
+      console.error('메시지 저장 실패:', error)
+      alert('메시지 저장에 실패했습니다. 다시 시도해주세요.')
+    } finally {
+      setIsSubmitting(false)
     }
-
-    const updatedMessages = [newMessage, ...messages]
-    setMessages(updatedMessages)
-    saveMessagesToStorage(updatedMessages) // localStorage에 저장
-    setFormData({ name: '', message: '' })
-    setShowForm(false)
   }
 
   return (
@@ -162,9 +169,10 @@ export default function GuestBook() {
             <div className="flex gap-3">
               <button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-pink-400 to-rose-400 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all active:scale-95"
+                disabled={isSubmitting}
+                className="flex-1 bg-gradient-to-r from-pink-400 to-rose-400 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                등록
+                {isSubmitting ? '등록 중...' : '등록'}
               </button>
               <button
                 type="button"
@@ -182,9 +190,15 @@ export default function GuestBook() {
 
         {/* 메시지 목록 */}
         <div className="space-y-4">
-          {messages.map((msg, index) => (
-            <MessageItem key={msg.id} msg={msg} index={index} />
-          ))}
+          {isLoading ? (
+            <div className="text-center py-8 text-gray-600">메시지를 불러오는 중...</div>
+          ) : messages.length === 0 ? (
+            <div className="text-center py-8 text-gray-600">아직 축하 메시지가 없습니다.</div>
+          ) : (
+            messages.map((msg, index) => (
+              <MessageItem key={msg.id} msg={msg} index={index} />
+            ))
+          )}
         </div>
       </div>
     </section>

@@ -193,21 +193,22 @@ export default function ImageGallery() {
                       </div>
                     </div>
                   ) : item.type === 'video' ? (
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[index] = el
-                      }}
-                      src={item.src}
-                      className="w-full h-full object-contain"
-                      style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', margin: '0 auto', display: 'block' }}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      onError={() => {
-                        console.error(`비디오 로드 실패: ${item.src}`)
-                      }}
-                    />
+                    <div className="w-full h-full flex items-center justify-center bg-black">
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[index] = el
+                        }}
+                        src={item.src}
+                        className="w-full h-full object-contain"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        onError={() => {
+                          console.error(`비디오 로드 실패: ${item.src}`)
+                        }}
+                      />
+                    </div>
                   ) : (
                     <img
                       src={item.src}
