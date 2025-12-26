@@ -70,13 +70,14 @@ export default function LocationInfo() {
           </div>
 
           {/* 지도 버튼 */}
-          <button
-            ref={buttonRef}
-            onClick={() => setShowMapModal(true)}
-            className={`w-full bg-gradient-to-r from-pink-400 to-rose-400 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all active:scale-95 ${buttonVisible ? 'scroll-animate visible' : 'scroll-animate'}`}
-          >
+          <div ref={buttonRef}>
+            <button
+              onClick={() => setShowMapModal(true)}
+              className={`w-full bg-gradient-to-r from-pink-400 to-rose-400 text-white py-4 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all active:scale-95 ${buttonVisible ? 'scroll-animate visible' : 'scroll-animate'}`}
+            >
             지도에서 보기
           </button>
+          </div>
         </div>
       </div>
 
