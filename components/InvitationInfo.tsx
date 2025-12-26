@@ -30,7 +30,7 @@ export default function InvitationInfo() {
         {/* 날짜와 시간 */}
         <div ref={titleRef} className={`space-y-4 ${titleVisible ? 'scroll-animate-fade visible' : 'scroll-animate-fade'}`}>
           <div className="inline-block border-t border-wedding-gold/30 w-24"></div>
-          <h2 className="text-3xl font-serif text-gray-800">결혼합니다</h2>
+          <h2 className="text-3xl font-sans text-gray-800">결혼합니다</h2>
           <div className="inline-block border-t border-wedding-gold/30 w-24"></div>
         </div>
 

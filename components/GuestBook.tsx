@@ -26,7 +26,7 @@ function MessageItem({ msg, index }: MessageItemProps) {
       style={{ transitionDelay: `${index * 0.1}s` }}
     >
       <div className="flex items-start justify-between mb-3">
-        <h4 className="font-bold text-gray-900 drop-shadow-sm">{msg.name}</h4>
+        <h4 className="font-bold text-gray-900 drop-shadow-sm font-sans">{msg.name}</h4>
         <span className="text-xs text-gray-600 drop-shadow-sm">{msg.date}</span>
       </div>
       <p className="text-gray-800 leading-relaxed drop-shadow-sm font-medium">{msg.message}</p>
