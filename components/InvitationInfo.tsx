@@ -40,20 +40,20 @@ export default function InvitationInfo() {
           <div className="inline-block border-t border-wedding-gold/30 w-24"></div>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
-              서로가 마주 보며 다져온 사랑을
+              결혼합니다.
               <br />
-              이제 함께 한 곳을 바라보며
+              두 사람이 작은 인연을 계기로
               <br />
-              걸어가고자 합니다.
+              사랑하는 연인이 되었고,
+              <br />
+              이제 부부로서 하나된 삶을 향해
+              <br />
+              긴 여정을 시작해보려 합니다.
             </p>
             <p>
-              저희 두 사람이 사랑의 이름으로
+              첫 걸음을 내딛는 5월의 끝자락,
               <br />
-              지켜나갈 수 있도록
-              <br />
-              앞날을 축복해 주시면
-              <br />
-              감사하겠습니다.
+              귀한 걸음 함께해주시면 감사하겠습니다.
             </p>
           </div>
           <div className="inline-block border-t border-wedding-gold/30 w-24"></div>

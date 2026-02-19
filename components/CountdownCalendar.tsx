@@ -16,8 +16,8 @@ export default function CountdownCalendar() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [calendarBgError, setCalendarBgError] = useState(false)
   
-  // 결혼식 날짜: 2026년 5월 24일 일요일 오후 11시
-  const weddingDate = new Date('2026-05-24T23:00:00')
+  // 결혼식 날짜: 2026년 5월 24일 일요일 오전 11시
+  const weddingDate = new Date('2026-05-24T11:00:00')
 
   useEffect(() => {
     const calculateTimeLeft = () => {

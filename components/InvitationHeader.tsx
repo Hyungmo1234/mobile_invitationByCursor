@@ -46,7 +46,7 @@ export default function InvitationHeader() {
         </div>
 
         <div className="pt-10 space-y-2">
-          <p className="text-white text-lg drop-shadow-lg">2026년 5월 24일 일요일 오후 11시</p>
+          <p className="text-white text-lg drop-shadow-lg">2026년 5월 24일 일요일 오전 11시</p>
           <p className="text-white/90 drop-shadow-md font-sans">더컨벤션 영등포</p>
         </div>
       </div>
